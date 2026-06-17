@@ -1,6 +1,6 @@
 # FarmConnect Frontend
 
-FarmConnect Frontend is a React application for farmers, buyers, and admins using the FarmConnect backend API. It demonstrates React Router, protected routes, role-based dashboards, Axios services, Bootstrap styling, and JWT storage in `localStorage`.
+FarmConnect Frontend is the React and Vite web application for farmers, buyers, and admins using the FarmConnect backend API. It includes public product browsing, authentication, protected dashboards, role-based routes, Axios API services, Bootstrap styling, and JWT storage in `localStorage`.
 
 ## Tech Stack
 
@@ -22,6 +22,12 @@ FarmConnect Frontend is a React application for farmers, buyers, and admins usin
 - `src/services/`: Axios API wrappers grouped by backend feature.
 - `src/utils/`: Small formatting helpers.
 
+## Prerequisites
+
+- Node.js 18 or newer
+- npm
+- A running FarmConnect backend API
+
 ## Setup
 
 1. Install packages:
@@ -36,18 +42,61 @@ npm install
 cp .env.example .env
 ```
 
-3. Make sure the backend is running on the URL in `VITE_API_URL`.
+3. Confirm `.env` points to the backend:
 
-4. Start the frontend:
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_UPLOADS_URL=http://localhost:5000
+```
+
+4. Start the backend from `../farmconnect-backend` if it is not already running:
 
 ```bash
+cd ../farmconnect-backend
 npm run dev
 ```
+
+5. Start the frontend from this folder:
+
+```bash
+cd ../farmconnect-frontend
+npm run dev
+```
+
+Vite prints the local app URL, usually `http://localhost:5173`.
 
 ## Environment Variables
 
 - `VITE_API_URL`: Backend API base URL, usually `http://localhost:5000/api`.
 - `VITE_UPLOADS_URL`: Backend file server URL, usually `http://localhost:5000`.
+
+## Run Commands
+
+```bash
+npm run dev
+```
+
+```bash
+npm run build
+```
+
+```bash
+npm run preview
+```
+
+## Verify the Frontend
+
+1. Open the Vite URL printed in the terminal, usually `http://localhost:5173`.
+2. Confirm the backend is running at `http://localhost:5000`.
+3. Log in with one of the seeded accounts below.
+4. Browse products to confirm the frontend can load API data.
+
+## Troubleshooting
+
+- If the product list does not load, check that the backend is running and `VITE_API_URL` ends with `/api`.
+- If image uploads do not display, check that `VITE_UPLOADS_URL` points to the backend root, not `/api`.
+- If login succeeds but dashboard requests fail, clear the browser's `farmconnect_token` and `farmconnect_user` values from `localStorage`, then log in again.
+- If the backend reports a CORS error, add the frontend origin printed by Vite to the backend `.env` `CLIENT_URLS` value and restart the backend.
 
 ## Page and Route Guide
 
