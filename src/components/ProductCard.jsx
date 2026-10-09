@@ -1,3 +1,4 @@
+import FavoriteButton from "./FavoriteButton";
 import { Link } from "react-router-dom";
 import { formatCurrency } from "../utils/formatCurrency";
 
@@ -17,9 +18,14 @@ function ProductCard({ product }) {
         <p className="text-muted small mb-2">{product.category_name || "Produce"} · {product.district}</p>
         <p className="mb-1 fw-semibold">{formatCurrency(product.price_per_unit)} / {product.unit}</p>
         <p className="small text-muted mb-3">{product.quantity} {product.unit} available</p>
-        <Link className="btn btn-success mt-auto" to={`/products/${product.id}`}>
-          View details
-        </Link>
+        <div className="d-flex gap-2 mt-auto">
+  <Link className="btn btn-success flex-grow-1" to={`/products/${product.id}`}>
+    View details
+  </Link>
+  <FavoriteButton productId={product.id} />
+</div>
+          
+        
       </div>
     </div>
   );
