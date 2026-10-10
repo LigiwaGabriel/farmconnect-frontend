@@ -152,3 +152,17 @@ Use these after loading the backend seed data. All use `password123`.
 - Admin: `admin@farmconnect.test`
 - Farmer: `farmer1@farmconnect.test`
 - Buyer: `buyer1@farmconnect.test`
+
+## New Features (Student Additions)
+
+1. **Favorites in the database:** Buyers tap the heart on a product card or product page. Saved products are stored through the API and listed at `/buyer/favorites`. This replaces the old `localStorage` favorites.
+2. **Cancel pending orders:** On `/buyer/orders`, orders with status `pending` show a Cancel button. After cancelling, the status changes to `cancelled`.
+3. **Ratings and reviews:** `/products/:id` shows the average rating and all reviews. Logged-in buyers can submit or update their own star rating and comment.
+
+New files: `src/components/FavoriteButton.jsx`, `src/components/ProductReviews.jsx`, `src/services/favoriteService.js`, `src/services/reviewService.js`.
+
+## Full Setup From Scratch
+
+1. Set up and start the backend first (see the backend README), including the database scripts.
+2. In this folder run `npm install`, copy `.env.example` to `.env`, then run `npm run dev`.
+3. Open the printed URL (usually `http://localhost:5173`) and log in with a seeded account, for example `buyer1@farmconnect.test` / `password123`.
