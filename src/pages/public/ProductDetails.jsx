@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AlertMessage from "../../components/AlertMessage";
+import FavoriteButton from "../../components/FavoriteButton";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import ProductReviews from "../../components/ProductReviews";
 import { useAuth } from "../../context/AuthContext";
 import { productService } from "../../services/productService";
 import { orderService } from "../../services/orderService";
@@ -56,16 +58,6 @@ function ProductDetails() {
     }
   }
 
-  function saveFavorite() {
-    const favorites = JSON.parse(localStorage.getItem("farmconnect_favorites") || "[]");
-
-    if (!favorites.includes(product.id)) {
-      localStorage.setItem("farmconnect_favorites", JSON.stringify([...favorites, product.id]));
-    }
-
-    setNotice("Product saved to favorites.");
-  }
-
   if (loading) return <LoadingSpinner />;
   if (!product) return <div className="container py-5"><AlertMessage type="danger" message={error} /></div>;
 
@@ -90,7 +82,7 @@ function ProductDetails() {
             <dt className="col-5">Harvest date</dt><dd className="col-7">{formatDate(product.harvest_date)}</dd>
             <dt className="col-5">Farmer</dt><dd className="col-7">{product.farmer_name}</dd>
           </dl>
-          {user?.role === "buyer" && <button className="btn btn-outline-success" onClick={saveFavorite}>Save favorite</button>}
+          <FavoriteButton productId={product.id} />
         </div>
       </div>
       {user?.role === "buyer" && (
@@ -120,6 +112,7 @@ function ProductDetails() {
           </div>
         </div>
       )}
+      <ProductReviews productId={product.id} />
     </div>
   );
 }
