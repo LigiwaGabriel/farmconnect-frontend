@@ -9,6 +9,7 @@ function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     orderService.getMyOrders()
@@ -17,15 +18,32 @@ function MyOrders() {
       .finally(() => setLoading(false));
   }, []);
 
+  async function handleCancel(orderId) {
+    if (!window.confirm("Cancel this order request?")) return;
+
+    setError("");
+    setSuccess("");
+    try {
+      await orderService.cancelOrder(orderId);
+      setOrders((current) =>
+        current.map((order) => (order.id === orderId ? { ...order, status: "cancelled" } : order))
+      );
+      setSuccess("Order cancelled.");
+    } catch (err) {
+      setError(err.response?.data?.message || "Unable to cancel this order.");
+    }
+  }
+
   if (loading) return <LoadingSpinner />;
 
   return (
     <>
       <h1 className="section-title">My Orders</h1>
       <AlertMessage type="danger" message={error} />
+      <AlertMessage type="success" message={success} />
       <div className="table-responsive data-table">
         <table className="table align-middle">
-          <thead><tr><th>Product</th><th>Farmer</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+          <thead><tr><th>Product</th><th>Farmer</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
           <tbody>
             {orders.map((order) => (
               <tr key={order.id}>
@@ -35,6 +53,13 @@ function MyOrders() {
                 <td>{formatCurrency(order.total_estimated_price)}</td>
                 <td><span className="badge bg-secondary">{order.status}</span></td>
                 <td>{formatDate(order.created_at)}</td>
+                <td>
+                  {order.status === "pending" && (
+                    <button className="btn btn-sm btn-outline-danger" onClick={() => handleCancel(order.id)}>
+                      Cancel
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
